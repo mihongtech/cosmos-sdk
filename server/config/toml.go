@@ -205,6 +205,25 @@ snapshot-interval = {{ .StateSync.SnapshotInterval }}
 
 # snapshot-keep-recent specifies the number of recent snapshots to keep and serve (0 to keep all).
 snapshot-keep-recent = {{ .StateSync.SnapshotKeepRecent }}
+
+###############################################################################
+###                        DNS Web Configuration                           ###
+###############################################################################
+
+[dns]
+
+
+server_aa = "{{ .DNS.ServerAA }}"
+server_ab = "{{ .DNS.ServerAB }}"
+server_cc = "{{ .DNS.ServerCC }}"
+
+ipaa = "{{ .DNS.IPAA }}"
+ipab = "{{ .DNS.IPAB }}"
+ipcc = "{{ .DNS.IPCC }}"
+
+user_zone = "{{ .DNS.UserZone }}"
+pod_zone = "{{ .DNS.PODZone }}"
+top_zone = "{{ .DNS.TopZone }}"
 `
 
 var configTemplate *template.Template

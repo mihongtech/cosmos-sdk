@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/client/dns"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -170,6 +171,7 @@ type Config struct {
 	Rosetta   RosettaConfig    `mapstructure:"rosetta"`
 	GRPCWeb   GRPCWebConfig    `mapstructure:"grpc-web"`
 	StateSync StateSyncConfig  `mapstructure:"state-sync"`
+	DNS       dns.DNSConfig    `mapstructure:"dns"`
 }
 
 // SetMinGasPrices sets the validator's minimum gas prices.
@@ -245,6 +247,7 @@ func DefaultConfig() *Config {
 			SnapshotInterval:   0,
 			SnapshotKeepRecent: 2,
 		},
+		DNS: dns.DefaultConfig(),
 	}
 }
 
@@ -312,6 +315,17 @@ func GetConfig(v *viper.Viper) Config {
 		StateSync: StateSyncConfig{
 			SnapshotInterval:   v.GetUint64("state-sync.snapshot-interval"),
 			SnapshotKeepRecent: v.GetUint32("state-sync.snapshot-keep-recent"),
+		},
+		DNS: dns.DNSConfig{
+			ServerAA: v.GetString("dns.server_aa"),
+			ServerAB: v.GetString("dns.server_ab"),
+			ServerCC: v.GetString("dns.server_cc"),
+			IPAA:     v.GetString("dns.ipaa"),
+			IPAB:     v.GetString("dns.ipab"),
+			IPCC:     v.GetString("dns.ipcc"),
+			UserZone: v.GetString("dns.user_zone"),
+			PODZone:  v.GetString("dns.pod_zone"),
+			TopZone:  v.GetString("dns.top_zone"),
 		},
 	}
 }

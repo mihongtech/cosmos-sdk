@@ -3,6 +3,7 @@ package client
 import (
 	"bufio"
 	"encoding/json"
+	"github.com/cosmos/cosmos-sdk/client/dns"
 	"io"
 	"os"
 
@@ -55,11 +56,18 @@ type Context struct {
 
 	// TODO: Deprecated (remove).
 	LegacyAmino *codec.LegacyAmino
+	DNSClient   *dns.Client
 }
 
 // WithKeyring returns a copy of the context with an updated keyring.
 func (ctx Context) WithKeyring(k keyring.Keyring) Context {
 	ctx.Keyring = k
+	return ctx
+}
+
+// WithDNSClient returns a copy of the context with an dns client.
+func (ctx Context) WithDNSClient(c *dns.Client) Context {
+	ctx.DNSClient = c
 	return ctx
 }
 
