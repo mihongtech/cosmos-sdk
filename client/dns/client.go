@@ -68,7 +68,7 @@ func (c Client) addRRSet(url string, set RRSet) error {
 
 	if bytes.Compare(buff, result) != 0 {
 		c.log.Error("addRRSet", "result", string(result))
-		return errors.New("failed add rrset")
+		return errors.New("failed add rrset: " + string(result))
 	}
 	c.log.Info("addRRSet", "result", string(result))
 	return nil
@@ -94,7 +94,7 @@ func (c Client) addZone(url string, set Zone) error {
 	}
 	if bytes.Compare(buff, result) != 0 {
 		c.log.Error("addZone", "result", string(result))
-		return errors.New("failed add rrset")
+		return errors.New("failed add zone:" + string(result))
 	}
 	c.log.Info("addZone", "result", string(result))
 	return nil
