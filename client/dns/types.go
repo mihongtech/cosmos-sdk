@@ -33,10 +33,10 @@ func ReqZone(userID string, cfg DNSConfig) Zone {
 }
 
 type Forward struct {
-	Zone  string   `json:"zone" yaml:"zone"`
-	Addrs []string `json:"addrs" yaml:"addrs"`
+	Name string `json:"name" yaml:"name"`
+	Addr string `json:"addr" yaml:"addr"`
 }
 
 func ReqForward(userID string, cfg DNSConfig) Forward {
-	return Forward{Zone: fmt.Sprintf("%s.%s", userID, cfg.PODZone), Addrs: []string{cfg.IPAB}}
+	return Forward{Name: fmt.Sprintf("%s.%s", userID, cfg.PODZone), Addr: cfg.IPAB}
 }

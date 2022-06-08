@@ -114,10 +114,10 @@ func (c Client) addForward(url string, set Forward) error {
 		c.log.Error("Add Forward Post failed, err:%v", err)
 		return err
 	}
-	//if bytes.Compare(buff, result) != 0 {
-	//	c.log.Error("addForward", "result", string(result))
-	//	return errors.New("failed add rrset")
-	//}
+	if bytes.Compare(buff, result) != 0 {
+		c.log.Error("addForward", "result", string(result))
+		return errors.New("failed add rrset")
+	}
 	c.log.Info("addForward", "result", string(result))
 	return nil
 }
