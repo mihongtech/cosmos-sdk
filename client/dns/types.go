@@ -39,7 +39,7 @@ func ReqRegistFile(config DNSConfig, fileId, userId, hash, hash_func string) RRS
 		fileId = strings.ReplaceAll(fileId, config.PODZone, config.UserZone)
 	}
 
-	oldUserId = strings.ReplaceAll(oldUserId, config.UserZone, "")
+	oldUserId = strings.ReplaceAll(oldUserId, "."+config.UserZone, "")
 
 	return RRSet{Zone: fmt.Sprintf("%s", userId), RRset: []string{fmt.Sprintf("%s. 3600 IN TXT \"user=%s,algo=%s,hash=%s\"", fileId, oldUserId, hash_func, hash)}}
 }
