@@ -39,6 +39,9 @@ type Zone struct {
 }
 
 func ReqZone(userID string, cfg DNSConfig) Zone {
+	if strings.Contains(userID, cfg.UserZone) {
+		userID = strings.ReplaceAll(userID, cfg.UserZone, cfg.PODZone)
+	}
 	return Zone{Name: fmt.Sprintf("%s", userID), IPs: []string{cfg.IPAB}}
 }
 
@@ -48,5 +51,8 @@ type Forward struct {
 }
 
 func ReqForward(userID string, cfg DNSConfig) Forward {
+	if strings.Contains(userID, cfg.UserZone) {
+		userID = strings.ReplaceAll(userID, cfg.UserZone, cfg.PODZone)
+	}
 	return Forward{Name: fmt.Sprintf("%s", userID), Addr: fmt.Sprintf("%s:5555", cfg.IPAB)}
 }
