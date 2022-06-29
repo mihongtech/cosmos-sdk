@@ -23,9 +23,6 @@ func ReqRegistFileURI(config DNSConfig, fileId, userId, fileURI string) RRSet {
 		userId = strings.ReplaceAll(userId, config.UserZone, config.PODZone)
 	}
 
-	if strings.Contains(fileId, config.PODZone) {
-		fileId = strings.ReplaceAll(fileId, config.PODZone, config.UserZone)
-	}
 	return RRSet{Zone: fmt.Sprintf("%s", userId), RRset: []string{fmt.Sprintf("%s. 3600 IN URI 10 1  \"%s\"", fileId, fileURI)}}
 }
 
@@ -33,10 +30,6 @@ func ReqRegistFile(config DNSConfig, fileId, userId, hash, hash_func string) RRS
 	oldUserId := userId
 	if strings.Contains(userId, config.UserZone) {
 		userId = strings.ReplaceAll(userId, config.UserZone, config.PODZone)
-	}
-
-	if strings.Contains(fileId, config.PODZone) {
-		fileId = strings.ReplaceAll(fileId, config.PODZone, config.UserZone)
 	}
 
 	oldUserId = strings.ReplaceAll(oldUserId, "."+config.UserZone, "")
