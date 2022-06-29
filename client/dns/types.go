@@ -1,6 +1,9 @@
 package dns
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type RRSet struct {
 	Zone  string   `json:"zone" yaml:"zone"`
@@ -16,11 +19,18 @@ func ReqRegistPod(config DNSConfig, userId, podURI string) RRSet {
 }
 
 func ReqRegistFileURI(config DNSConfig, fileId, userId, fileURI string) RRSet {
+	if strings.Contains(userId, config.UserZone) {
+		userId = strings.ReplaceAll(userId, config.UserZone, config.PODZone)
+	}
 	return RRSet{Zone: fmt.Sprintf("%s.%s", userId, config.PODZone), RRset: []string{fmt.Sprintf("%s.%s. 3600 IN URI 10 1  \"%s\"", fileId, userId, fileURI)}}
 }
 
 func ReqRegistFile(config DNSConfig, fileId, userId, hash, hash_func string) RRSet {
-	return RRSet{Zone: fmt.Sprintf("%s.%s", userId, config.PODZone), RRset: []string{fmt.Sprintf("%s.%s.%s. 3600 IN TXT \"user=%s,algo=%s,hash=%s\"", fileId, userId, config.PODZone, userId, hash_func, hash)}}
+	oldUserId := userId
+	if strings.Contains(userId, config.UserZone) {
+		userId = strings.ReplaceAll(userId, config.UserZone, config.PODZone)
+	}
+	return RRSet{Zone: fmt.Sprintf("%s", userId), RRset: []string{fmt.Sprintf("%s.%s. 3600 IN TXT \"user=%s,algo=%s,hash=%s\"", fileId, userId, oldUserId, hash_func, hash)}}
 }
 
 type Zone struct {
@@ -29,7 +39,7 @@ type Zone struct {
 }
 
 func ReqZone(userID string, cfg DNSConfig) Zone {
-	return Zone{Name: fmt.Sprintf("%s.%s", userID, cfg.PODZone), IPs: []string{cfg.IPAB}}
+	return Zone{Name: fmt.Sprintf("%s", userID), IPs: []string{cfg.IPAB}}
 }
 
 type Forward struct {
@@ -38,5 +48,5 @@ type Forward struct {
 }
 
 func ReqForward(userID string, cfg DNSConfig) Forward {
-	return Forward{Name: fmt.Sprintf("%s.%s", userID, cfg.PODZone), Addr: fmt.Sprintf("%s:5555", cfg.IPAB)}
+	return Forward{Name: fmt.Sprintf("%s", userID), Addr: fmt.Sprintf("%s:5555", cfg.IPAB)}
 }
