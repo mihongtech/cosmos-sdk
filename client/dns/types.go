@@ -22,7 +22,11 @@ func ReqRegistFileURI(config DNSConfig, fileId, userId, fileURI string) RRSet {
 	if strings.Contains(userId, config.UserZone) {
 		userId = strings.ReplaceAll(userId, config.UserZone, config.PODZone)
 	}
-	return RRSet{Zone: fmt.Sprintf("%s.%s", userId, config.PODZone), RRset: []string{fmt.Sprintf("%s.%s. 3600 IN URI 10 1  \"%s\"", fileId, userId, fileURI)}}
+
+	if strings.Contains(fileId, config.PODZone) {
+		fileId = strings.ReplaceAll(fileId, config.PODZone, config.UserZone)
+	}
+	return RRSet{Zone: fmt.Sprintf("%s", userId), RRset: []string{fmt.Sprintf("%s. 3600 IN URI 10 1  \"%s\"", fileId, fileURI)}}
 }
 
 func ReqRegistFile(config DNSConfig, fileId, userId, hash, hash_func string) RRSet {
@@ -30,7 +34,14 @@ func ReqRegistFile(config DNSConfig, fileId, userId, hash, hash_func string) RRS
 	if strings.Contains(userId, config.UserZone) {
 		userId = strings.ReplaceAll(userId, config.UserZone, config.PODZone)
 	}
-	return RRSet{Zone: fmt.Sprintf("%s", userId), RRset: []string{fmt.Sprintf("%s.%s. 3600 IN TXT \"user=%s,algo=%s,hash=%s\"", fileId, userId, oldUserId, hash_func, hash)}}
+
+	if strings.Contains(fileId, config.PODZone) {
+		fileId = strings.ReplaceAll(fileId, config.PODZone, config.UserZone)
+	}
+
+	oldUserId = strings.ReplaceAll(oldUserId, config.UserZone, "")
+
+	return RRSet{Zone: fmt.Sprintf("%s", userId), RRset: []string{fmt.Sprintf("%s. 3600 IN TXT \"user=%s,algo=%s,hash=%s\"", fileId, oldUserId, hash_func, hash)}}
 }
 
 type Zone struct {
