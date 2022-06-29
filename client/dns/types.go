@@ -38,5 +38,5 @@ type Forward struct {
 }
 
 func ReqForward(userID string, cfg DNSConfig) Forward {
-	return Forward{Name: fmt.Sprintf("%s.%s", userID, cfg.PODZone), Addr: cfg.IPAB}
+	return Forward{Name: fmt.Sprintf("%s.%s", userID, cfg.PODZone), Addr: fmt.Sprintf("%s:5555", cfg.IPAB)}
 }
