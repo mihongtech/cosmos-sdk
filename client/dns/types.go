@@ -8,15 +8,15 @@ type RRSet struct {
 }
 
 func ReqRegistUser(config DNSConfig, userId, pubkey string) RRSet {
-	return RRSet{Zone: config.UserZone, RRset: []string{fmt.Sprintf("%s.%s. 3600 IN CERT 2 77 2 %s", userId, config.UserZone, pubkey)}}
+	return RRSet{Zone: config.UserZone, RRset: []string{fmt.Sprintf("%s. 3600 IN CERT 2 77 2 %s", userId, pubkey)}}
 }
 
 func ReqRegistPod(config DNSConfig, userId, podURI string) RRSet {
-	return RRSet{Zone: config.UserZone, RRset: []string{fmt.Sprintf("%s.%s. 3600 IN URI 10 1 \"%s\"", userId, config.UserZone, podURI)}}
+	return RRSet{Zone: config.UserZone, RRset: []string{fmt.Sprintf("%s. 3600 IN URI 10 1 \"%s\"", userId, podURI)}}
 }
 
 func ReqRegistFileURI(config DNSConfig, fileId, userId, fileURI string) RRSet {
-	return RRSet{Zone: fmt.Sprintf("%s.%s", userId, config.PODZone), RRset: []string{fmt.Sprintf("%s.%s.%s. 3600 IN URI 10 1  \"%s\"", fileId, userId, config.PODZone, fileURI)}}
+	return RRSet{Zone: fmt.Sprintf("%s.%s", userId, config.PODZone), RRset: []string{fmt.Sprintf("%s.%s. 3600 IN URI 10 1  \"%s\"", fileId, userId, fileURI)}}
 }
 
 func ReqRegistFile(config DNSConfig, fileId, userId, hash, hash_func string) RRSet {
